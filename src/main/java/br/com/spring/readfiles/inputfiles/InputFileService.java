@@ -4,7 +4,6 @@ package br.com.spring.readfiles.inputfiles;
 import br.com.spring.readfiles.beans.Departamento;
 import br.com.spring.readfiles.beans.Funcionario;
 import br.com.spring.readfiles.inputfiles.repositories.DepartamentoRepository;
-import br.com.spring.readfiles.inputfiles.repositories.FuncionarioRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Row;
