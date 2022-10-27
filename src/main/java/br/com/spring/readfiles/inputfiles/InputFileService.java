@@ -11,7 +11,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Iterator;
 
@@ -27,9 +26,8 @@ public class InputFileService {
     private final DepartamentoRepository departamentoRepository;
 
 
-    public void CreateObjs(Sheet sheet) throws IOException {
-        Departamento departamento = new Departamento();
-        Funcionario funcionario = new Funcionario();
+    public void CreateObjs(Sheet sheet) {
+
 
         Iterator<Row> rowIterator = sheet.iterator();
         while (rowIterator.hasNext()) {
@@ -38,9 +36,9 @@ public class InputFileService {
                 continue;
             }
 
-            if (rowIterator.hasNext()) ;
-            String nomedep = row.getCell(COLUNA_DEPARTAMENTO).getStringCellValue();
-
+            String nomedep = row.getCell(COLUNA_DEPARTAMENTO).getStringCellValue().toUpperCase();
+            Departamento departamento;
+            log.info("criando departamento");
             departamento = departamentoRepository.findFirstByNome(nomedep);
             if (ObjectUtils.isEmpty(departamento)) {
                 departamento = Departamento.builder()
@@ -50,18 +48,18 @@ public class InputFileService {
 
             String nomefunc = row.getCell(COLUNA_NOME_FUNCIONARIO).getStringCellValue().toUpperCase();
             BigDecimal salario = BigDecimal.valueOf(row.getCell(COLUNA_SALARIO).getNumericCellValue());
+
+            Funcionario funcionario;
+            log.info("criando funcionário");
             funcionario = Funcionario.builder()
                     .nome(nomefunc)
                     .departamento(departamento)
                     .salario(salario)
                     .build();
             departamento.getFuncionario().add(funcionario);
-
             log.info("persistindo dados");
-            departamento = departamentoRepository.save(departamento);
-
-
+            departamentoRepository.save(departamento);
         }
-
     }
 }
+
